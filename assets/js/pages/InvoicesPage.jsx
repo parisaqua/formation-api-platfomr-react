@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Pagination from "../components/Pagination";
 import InvoicesAPI from "../services/invoicesAPI";
-import axios from "axios";
 import moment from "moment";
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import TableLoader from '../components/loaders/TableLoader';
 
 const STATUS_CLASSES = {
     PAID: "success",
@@ -22,15 +23,16 @@ const InvoicesPage = (props) => {
     const [invoices, setInvoices] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [search, setSearch] = useState("");
+    const [loading, setLoading] = useState(true);
+    const itemsPerPage = 15;
 
     const fetchInvoices = async () => {
         try {
-            const data = await axios
-                .get("http://localhost:8000/api/invoices")
-                .then(response => response.data['hydra:member']);
+            const data = await InvoicesAPI.findAll();
             setInvoices(data);
+            setLoading(false);
         } catch(error) {
-            console.log(error.response);
+            toast.error("Une erreur est survenue !");
         }
     };
 
@@ -47,10 +49,11 @@ const InvoicesPage = (props) => {
         // 2. approche pessimiste et moins réactive
         try {
             await InvoicesAPI.delete(id);
-            console.log("ok");
+            toast.success("La facture a bien été suprimée.");
         } catch(error) {
             setInvoices(originalInvoices);
-            console.log(error.response);
+            toast.error("Une erreur est survenue");
+            
         }
     };
 
@@ -63,8 +66,6 @@ const InvoicesPage = (props) => {
         setSearch(currentTarget.value);
         setCurrentPage(1);
     };
-
-    const itemsPerPage = 15;
 
     const filteredInvoices = invoices.filter(
         i => 
@@ -113,7 +114,7 @@ const InvoicesPage = (props) => {
                         <th></th>
                     </tr>
                 </thead>
-                <tbody>
+                {!loading && (<tbody>
                     {paginatedInvoices.map( invoice =>
                         <tr key={invoice.id}>
                             <td>{invoice.chrono}</td>
@@ -124,7 +125,7 @@ const InvoicesPage = (props) => {
                             </td>
                             <td className="text-center">{invoice.amount.toLocaleString()} €</td>
                             <td className="text-center">
-                                <Link to={"/invoices/" + invoice.id} className="btn btn-sm btn-info mr-1">Editer</Link>
+                                <Link to={ "/invoices/" + invoice.id } className="btn btn-sm btn-info mr-1">Editer</Link>
                                 <button 
                                 onClick={() => handleDelete(invoice.id)}
                                 className="btn btn-sm btn-danger"
@@ -136,7 +137,9 @@ const InvoicesPage = (props) => {
                     )}
                     
                 </tbody>
+                )}
             </table>
+            {loading && <TableLoader />}
 
             {itemsPerPage < filteredInvoices.length && (<Pagination 
                 currentPage={currentPage} 

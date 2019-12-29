@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import Field from '../components/forms/Field';
 import { Link } from 'react-router-dom';
 import CustomersAPI from "../services/customersAPI";
+import { toast } from 'react-toastify';
 
 const CustomerPage = ({ match, history }) => {
     
@@ -30,8 +31,7 @@ const CustomerPage = ({ match, history }) => {
             setCustomer({ firstName, lastName, email, company });
             
         } catch (error) {
-            console.log(error.response);
-            //Notification flash d'une erreur
+            toast.error("Impossible de charger le client !");
             history.replace("/customers");
         }
     }
@@ -55,18 +55,16 @@ const CustomerPage = ({ match, history }) => {
         event.preventDefault();
 
         try {
+            setErrors({});
             if(editing) {
                 await CustomersAPI.update(id, customer);
-                //TODO notification de succes
+                toast.success("Le client a bien été modifié");
                 history.replace("/customers");
             } else {
                await CustomersAPI.create(customer);
-                // TODO notif de succes
+                toast.success("Le client a bien été créé");
                 history.replace("/customers");
             }
-            
-           setErrors({});
-           //console.log(response.data);
 
         } catch ({ response }) {
             const { violations } = response.data;
@@ -76,6 +74,7 @@ const CustomerPage = ({ match, history }) => {
                     apiErrors[propertyPath] = message;
             });
 
+            toast.error("Des erreurs dans votre formulaire ...");
             setErrors(apiErrors);
 
             //console.log(apiErrors);

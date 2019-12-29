@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Field from '../components/forms/Field';
 import { Link } from 'react-router-dom';
 import UsersAPI from "../services/UsersAPI";
+import { toast } from 'react-toastify';
 
 const RegisterPage = ({ history }) => {
     
@@ -11,7 +12,6 @@ const RegisterPage = ({ history }) => {
         email: "",
         password: "",
         passwordConfirm: ""
-
     });
 
     const [errors, setErrors] = useState({
@@ -20,7 +20,6 @@ const RegisterPage = ({ history }) => {
         email: "",
         password: "",
         passwordConfirm: ""
-
     });
     
      //Gestion des changements de l'input dans le formulaire
@@ -38,16 +37,16 @@ const RegisterPage = ({ history }) => {
         if(user.password !== user.passwordConfirm) {
             apiErrors.passwordConfirm = "La confirmation ne correspond pas à votre mot de passe ! ";
             setErrors(apiErrors);
+            toast.error("Des erreurs dans votre formulaire ...");
             return;
         }
 
         try {
             await UsersAPI.register(user);
-            //TODO flash success
             setErrors({}); // important de le laisser avant le changement de page !
+            toast.success("Vous êtes bien enregistré, connectez-vous !");
             history.replace("/login");
             
-
         } catch (error) {
             const {violations} = error.response.data;
             
@@ -56,7 +55,10 @@ const RegisterPage = ({ history }) => {
                     apiErrors[violation.propertyPath] = violation.message
                 });
                 setErrors(apiErrors);
+                toast.error("Des erreurs dans votre formulaire ...");
             }
+
+           
         }
     }
     

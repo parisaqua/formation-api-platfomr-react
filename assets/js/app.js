@@ -13,6 +13,8 @@ import PrivateRoute from './components/PrivateRoute';
 import CustomerPage from './pages/CustomerPage';
 import InvoicePage from './pages/InvoicePage';
 import RegisterPage from './pages/RegisterPage';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 // any CSS you require will output into a single css file (app.css in this case)
@@ -50,6 +52,7 @@ const App = () => {
                     </Switch>
                 </main>
             </HashRouter>
+            <ToastContainer position={toast.POSITION.TOP_CENTER} autoClose={2500} />
         </AuthContext.Provider>
     );
 };
