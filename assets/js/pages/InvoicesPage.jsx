@@ -3,6 +3,7 @@ import Pagination from "../components/Pagination";
 import InvoicesAPI from "../services/invoicesAPI";
 import axios from "axios";
 import moment from "moment";
+import { Link } from 'react-router-dom';
 
 const STATUS_CLASSES = {
     PAID: "success",
@@ -70,6 +71,7 @@ const InvoicesPage = (props) => {
             i.customer.lastName.toLowerCase().includes(search.toLowerCase()) ||
             i.customer.firstName.toLowerCase().includes(search.toLowerCase()) ||
             i.amount.toString().startsWith(search.toLowerCase()) ||
+            i.chrono.toString().startsWith(search.toLowerCase()) ||
             STATUS_LABELS[i.status].toLowerCase().includes(search.toLowerCase()) 
     );
 
@@ -84,7 +86,12 @@ const InvoicesPage = (props) => {
 
     return ( 
         <>
+        <div className="mb-3 d-flex justify-content-between align-items-center">
             <h1>Liste des factures</h1>
+            <Link to="/invoices/new" className="btn btn-info">
+                Créer une facture
+            </Link>
+        </div>
 
             <div className="form-group">
                 <input 
@@ -117,7 +124,7 @@ const InvoicesPage = (props) => {
                             </td>
                             <td className="text-center">{invoice.amount.toLocaleString()} €</td>
                             <td className="text-center">
-                                <button className="btn btn-sm btn-info mr-1">Editer</button>
+                                <Link to={"/invoices/" + invoice.id} className="btn btn-sm btn-info mr-1">Editer</Link>
                                 <button 
                                 onClick={() => handleDelete(invoice.id)}
                                 className="btn btn-sm btn-danger"

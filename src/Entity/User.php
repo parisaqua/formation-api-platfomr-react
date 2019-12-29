@@ -44,23 +44,23 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
-     * @Assert\NotBlank(message="Le mot de passe du user est obligatoire")
+     * @Assert\NotBlank(message="Le mot de passe est obligatoire")
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
-     * @Assert\NotBlank(message="Le prénom du user est obligatoire")
      * @Assert\Length(min=3, minMessage="Le prénom doit être compris entre 3 et 255 caractères", max=255, maxMessage="Le prénom doit être compris entre 3 et 255 caractères")
+     * @Assert\NotBlank(message="Le prénom est obligatoire")
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
-     * @Assert\NotBlank(message="Le nom du user est obligatoire")
      * @Assert\Length(min=3, minMessage="Le nom doit être compris entre 3 et 255 caractères", max=255, maxMessage="Le nom doit être compris entre 3 et 255 caractères")
+     * @Assert\NotBlank(message="Le nom de famille est obligatoire")
      */
     private $lastName;
 

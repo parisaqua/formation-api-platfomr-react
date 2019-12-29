@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Pagination from "../components/Pagination";
 import CustomersAPI from "../services/customersAPI";
+import { Link } from 'react-router-dom';
 
 const CustomersPage = (props) => {
 
@@ -65,7 +66,15 @@ const CustomersPage = (props) => {
 
     return ( 
     <>
-    <h1>Liste des clients</h1>
+    
+    <div className="mb-3 d-flex justify-content-between align-items-center">
+        <h1>Liste des clients</h1>
+        <Link to="/customers/new" className="btn btn-info">
+            Créer un client
+        </Link>
+    </div>
+    
+    
 
     <div className="form-group">
         <input 
@@ -101,6 +110,7 @@ const CustomersPage = (props) => {
                 </td>
                 <td className="text-center">{customer.totalAmount.toLocaleString()} €</td>
                 <td>
+                    <Link to={"/customers/" + customer.id} className="btn btn-sm btn-info mr-1">Editer</Link>
                     <button 
                         onClick={() => handleDelete(customer.id)}
                         disabled={customer.invoices.length > 0} 
