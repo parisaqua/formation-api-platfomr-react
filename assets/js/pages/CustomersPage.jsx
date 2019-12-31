@@ -12,17 +12,21 @@ const CustomersPage = props => {
     const [search, setSearch] = useState("");
     const [loading, setLoading] = useState(true);
     
-    // Permet de récupérer les customers
-    const fetchCustomers = async() =>{
+    
+    // Permet d'aller récupérer les customers
+    const fetchCustomers = async () => {
         try {
-            const data = await CustomersAPI.findAll()
-            setCustomers(data);
-            setLoading(false);
-        } catch(error) {
-            toast.error("Impossible de charger les clients !");
-            console.log(error.response)
+        const data = await CustomersAPI.findAll();
+        setCustomers(data);
+        setLoading(false);
+        console.log(data);
+        } catch (error) {
+        toast.error("Impossible de charger les clients");
+        console.log(error.response)
         }
-    }
+    };
+    
+    
 
     useEffect(() => {
         fetchCustomers();

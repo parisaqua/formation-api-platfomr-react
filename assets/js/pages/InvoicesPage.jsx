@@ -118,7 +118,7 @@ const InvoicesPage = (props) => {
                     {paginatedInvoices.map( invoice =>
                         <tr key={invoice.id}>
                             <td>{invoice.chrono}</td>
-                            <td> <a href="#">{invoice.customer.firstName} {invoice.customer.lastName}</a></td>
+                            <td> <Link to={"/customers/" + invoice.customer.id} className="btn btn-link">{invoice.customer.firstName} {invoice.customer.lastName}</Link></td>
                             <td className="text-center">{formatDate(invoice.sentAt)}</td>
                             <td className="text-center">
                                 <span className={"badge badge-" + STATUS_CLASSES[invoice.status]}>{STATUS_LABELS[invoice.status]}</span>
